@@ -1,123 +1,38 @@
 [
   {
-    "name": "Introduction-to-Python-Programming",
-    "duration": 6,
-    "enrolled": 1200,
-    "price": 49.99,
-    "levels": "Intermediate",
-    "lessons": 30,
-    "category": "Programming",
-    "instructor": "John-Smith",
-    "review": 4.5
+    "Name": "Addition",
+    "Id": 1,
+    "Ques": "Write a function to get sum of a given number.",
+    "Inputs": [[5, 3],[4,5]],
+    "Output": [120, 6, 1],
+    "Solution": "function factorial(n) {\n  if (n === 0) {\n    return 1;\n  }\n  return n * factorial(n - 1);\n}\n\nconsole.log(factorial(5)); // Output: 120",
+    "levels": "Intermediate"
   },
   {
-    "name": "Machine-Learning-Fundamentals",
-    "duration": 8,
-    "enrolled": 800,
-    "price": 79.99,
-    "levels": "All",
-    "lessons": 40,
-    "category": "Data-Science",
-    "instructor": "Alice-Johnson",
-    "review": 4.8
+    "Name": "Calculate Factorial",
+    "Id": 4,
+    "Ques": "Write a function to calculate the factorial of a given number.",
+    "Inputs": [[5],[ 3],[ 0]],
+    "Output": [[120], [6], [1]],
+    "Solution": "function factorial(n) {\n  if (n === 0) {\n    return 1;\n  }\n  return n * factorial(n - 1);\n}\n\nconsole.log(factorial(5)); // Output: 120",
+    "levels": "Intermediate"
   },
   {
-    "name": "Digital-Marketing-Masterclass",
-    "duration": 5,
-    "enrolled": 1500,
-    "price": 59.99,
-    "levels": "Intermediate",
-    "lessons": 25,
-    "category": "Marketing",
-    "instructor": "Emily-Brown",
-    "review": 4.6
+    "Name": "Palindrome Check",
+    "Id": 2,
+    "Ques": "Write a function to check if a string is a palindrome.",
+    "Inputs": [["racecar"], ["hello"], ["madam"]],
+    "Output": [true, false, true],
+    "Solution": "function isPalindrome(str) {\n  return str === str.split('').reverse().join('');\n}\n\nconsole.log(isPalindrome('racecar')); // Output: true",
+    "levels": "Beginner"
   },
   {
-    "name": "Introduction-to-Web-Development",
-    "duration": 4,
-    "enrolled": 1000,
-    "price": 39.99,
-    "levels": "Beginner",
-    "lessons": 20,
-    "category": "Web-Development",
-    "instructor": "Michael-Johnson",
-    "review": 4.7
-  },
-  {
-    "name": "Financial-Accounting-Basics",
-    "duration": 5,
-    "enrolled": 700,
-    "price": 69.99,
-    "levels": "Intermediate",
-    "lessons": 35,
-    "category": "Finance",
-    "instructor": "Sarah-Johnson",
-    "review": 4.6
-  },
-  {
-    "name": "Introduction-to-Artificial-Intelligence",
-    "duration": 7,
-    "enrolled": 900,
-    "price": 89.99,
-    "levels": "All",
-    "lessons": 45,
-    "category": "Artificial-Intelligence",
-    "instructor": "David-Williams",
-    "review": 4.9
-  },
-  {
-    "name": "Photography-Masterclass",
-    "duration": 6,
-    "enrolled": 1100,
-    "price": 59.99,
-    "levels": "Intermediate",
-    "lessons": 30,
-    "category": "Photography",
-    "instructor": "Emma-Davis",
-    "review": 4.7
-  },
-  {
-    "name": "Business-Management-Essentials",
-    "duration": 4,
-    "enrolled": 800,
-    "price": 49.99,
-    "levels": "Beginner",
-    "lessons": 20,
-    "category": "Business",
-    "instructor": "Michael-Brown",
-    "review": 4.5
-  },
-  {
-    "name": "Spanish-Language-for-Beginners",
-    "duration": 6,
-    "enrolled": 600,
-    "price": 29.99,
-    "levels": "Intermediate",
-    "lessons": 25,
-    "category": "Language",
-    "instructor": "Maria-Garcia",
-    "review": 4.8
-  },
-  {
-    "name": "Introduction-to-Graphic-Design",
-    "duration": 5,
-    "enrolled": 950,
-    "price": 39.99,
-    "levels": "Intermediate",
-    "lessons": 30,
-    "category": "Design",
-    "instructor": "Daniel-Lee",
-    "review": 4.6
-  },
-  {
-    "name": "Introduction-to-analog-Design",
-    "duration": 5,
-    "enrolled": 950,
-    "price": 39.99,
-    "levels": "Intermediate",
-    "lessons": 30,
-    "category": "Design",
-    "instructor": "Daniel-Lee",
-    "review": 4.6
+    "Name": "Find Maximum Value",
+    "Id": 3,
+    "Ques": "Write a function to find the maximum value in an array of numbers.",
+    "Inputs": [[1, 5, 3, 9], [10, 2, 8, 4]],
+    "Output": [9, 10],
+    "Solution": "function findMax(arr) {\n  return Math.max(...arr);\n}\n\nconsole.log(findMax([1, 5, 3, 9])); // Output: 9",
+    "levels": "Intermediate"
   }
 ]

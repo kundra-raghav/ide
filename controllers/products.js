@@ -1,290 +1,88 @@
-const product=require('../models/product')
+const Product = require('../models/product')
+const { exec, spawnSync } = require('child_process');
+const fs = require('fs');
+const { setDefaultAutoSelectFamily } = require('net');
 
-const getAllProducts=async(req,res)=>{
+
+
+const compileCpp = async (req, res) => {
     try {
-        const { name, duration, enrolled, price, levels, lessons, category, instructor, review, sort, select } = req.query;
-        let queryObject = {};
-    
-        if (name) {
-            const nameValues = name.split(',').map(name => new RegExp(name.trim(), 'i'));
-            queryObject.name = { $in: nameValues };
-        }
-        if (duration) {
-            const durations = duration.split(',');
-            queryObject.duration = { $in: durations };
-        }
-        if (enrolled) {
-            const enrollments = enrolled.split(',');
-            queryObject.enrolled = { $in: enrollments };
-        }
-        if (price) {
-            const prices = price.split(',');
-            queryObject.price = { $in: prices };
-        }
-        if (levels) {
-            const levelValues = levels.split(',');
-            queryObject.levels = { $in: levelValues };
-        }
-        if (lessons) {
-            const lessonValues = lessons.split(',');
-            queryObject.lessons = { $in: lessonValues };
-        }
-        if (category) {
-            const categoryValues = category.split(',').map(category => new RegExp(category.trim(), 'i'));
-            queryObject.category = { $in: categoryValues };
-        }
-        if (instructor) {
-            const instructorValues = instructor.split(',').map(instructor => new RegExp(instructor.trim(), 'i'));
-            queryObject.instructor = { $in: instructorValues };
-        }
-        if (review) {
-            const reviews = review.split(',');
-            queryObject.review = { $in: reviews };
-        }
-    
-        let myData = product.find(queryObject);
-    
-        if (sort) {
-            const sortFields = sort.split(',').join(' ');
-            myData = myData.sort(sortFields);
-        }
-        if (select) {
-            const selectFields = select.split(',').join(' ');
-            myData = myData.select(selectFields);
-        }
-    
-        // Pagination
-        let page = Number(req.query.page) || 1;
-        let limit = Number(req.query.limit) || 4;
-        let skip = (page - 1) * limit;
-    
-        const totalProductsCount = await product.countDocuments(queryObject); // Count total documents matching the query
-        const totalPages = Math.ceil(totalProductsCount / limit);
-    
-        myData = myData.skip(skip).limit(limit);
-    
-        const apiData = await myData;
-    
-        res.status(200).json({
-            apiData,
-            totalPages,
-            currentPage: page,
-            totalProductsCount
+        const { Id } = req.body;
+        const IP = await Product.find({ Id: Id }, { Inputs: 1, _id: 0 });
+
+        console.log(IP)
+        // Assuming the C++ code is passed in the request body
+        const { cppCode } = req.body;
+
+
+        // Write the C++ code to a file
+        fs.writeFileSync('main.cpp', cppCode);
+
+        // Compile the C++ code using g++
+        exec('g++ -o compiled_program main.cpp', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Compilation error: ${error.message}`);
+                res.status(500).json({ error: 'Compilation error', message: error.message });
+                return;
+            }
+            if (stderr) {
+                console.error(`Compilation stderr: ${stderr}`);
+                res.status(500).json({ error: 'Compilation error', message: stderr });
+                return;
+            }
+
+            // Compilation successful
+            console.log('Compilation successful');
+
+            const inputs = IP[0].Inputs;
+
+            // Iterate over each inner array in the Inputs field
+            for (let i = 0; i < inputs.length; i++) {
+                const innerArray = inputs[i];
+
+                console.log(innerArray)
+                var runResult = spawnSync('compiled_program', innerArray, { stdio: 'inherit' });
+                // Iterate over each value in the inner array
+                // for (let j = 0; j < innerArray.length; j++) {
+                //     const value = innerArray[j];
+                //     console.log(`Value at index ${j}: ${value}`);
+                // }
+                // console.log(runResult)
+
+                
+                // Execution successful
+                // console.log('Execution successful');
+            }
+                res.status(200).json({ message: 'Execution successful', my: runResult });
         });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
     }
-    
-
-   
-
-   
- 
-    
-  
+    catch (err) {
+        console.error(`Internal server error: ${err.message}`);
+        res.status(500).json({ error: 'Internal server error', message: err.message });
+    }
 };
-const getAllProductsTesting=async(req,res)=>{
+const displayQues = async (req, res) => {
     try {
-        const { name, duration, enrolled, price, levels, lessons, category, instructor, review, sort, select } = req.query;
-        let queryObject = {};
-    
-        if (name) {
-            const nameValues = name.split(',').map(name => new RegExp(name.trim(), 'i'));
-            queryObject.name = { $in: nameValues };
-        }
-        if (duration) {
-            const durations = duration.split(',');
-            queryObject.duration = { $in: durations };
-        }
-        if (enrolled) {
-            const enrollments = enrolled.split(',');
-            queryObject.enrolled = { $in: enrollments };
-        }
-        if (price) {
-            const prices = price.split(',');
-            queryObject.price = { $in: prices };
-        }
-        if (levels) {
-            const levelValues = levels.split(',');
-            queryObject.levels = { $in: levelValues };
-        }
-        if (lessons) {
-            const lessonValues = lessons.split(',');
-            queryObject.lessons = { $in: lessonValues };
-        }
-        if (category) {
-            const categoryValues = category.split(',').map(category => new RegExp(category.trim(), 'i'));
-            queryObject.category = { $in: categoryValues };
-        }
-        if (instructor) {
-            const instructorValues = instructor.split(',').map(instructor => new RegExp(instructor.trim(), 'i'));
-            queryObject.instructor = { $in: instructorValues };
-        }
-        if (review) {
-            const reviews = review.split(',');
-            queryObject.review = { $in: reviews };
-        }
-    
-        let myData = product.find(queryObject);
-    
-        if (sort) {
-            const sortFields = sort.split(',').join(' ');
-            myData = myData.sort(sortFields);
-        }
-        if (select) {
-            const selectFields = select.split(',').join(' ');
-            myData = myData.select(selectFields);
-        }
-    
-        // Pagination
-        let page = Number(req.query.page) || 1;
-        let limit = Number(req.query.limit) || 4;
-        let skip = (page - 1) * limit;
-    
-        const totalProductsCount = await product.countDocuments(queryObject); // Count total documents matching the query
-        const totalPages = Math.ceil(totalProductsCount / limit);
-    
-        myData = myData.skip(skip).limit(limit);
-    
-        const apiData = await myData;
-    
-        res.status(200).json({
-            apiData,
-            totalPages,
-            currentPage: page,
-            totalProductsCount
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        // Fetch all questions from the database
+        const questions = await Product.find({}, { Name: 1, _id: 0 });
+        // console.log(questions) // Assuming your model is named Product
+        res.json(questions); // Send the list of questions as JSON response
+    } catch (err) {
+        console.error('Error fetching questions:', err.message);
+        res.status(500).json({ error: 'Internal server error' });
     }
-}    
-
-    
-
-    
-//   const myData= await product.find(req.query).select('name price')
-//   res.status(200).json({myData})
+}
 
 
-// router.route('./price').get(findPrice)
-// router.route('./levels').get(findLevels)
-// router.route('./lessons').get(findLessons)
 
-const findDuration=async(req,res)=>{
-    try {
-        // Step 4: Extract lt and gt parameters from the URL query
-        const lt = req.query.lt;
-        const gt = req.query.gt;
-    
-        // Step 5: Use Mongoose queries with $lt and $gt operators
-        let query = {};
-        if (lt) {
-          query.duration = { $lt: lt };
-        }
-        if (gt) {
-          query.duration = { ...query.duration, $gt: gt };
-        }
-    
-        const apiData = await product.find(query);
-    
-        // Step 6: Return the results to the client
-        res.status(200).json(apiData);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-}
-const findEnrolled=async(req,res)=>{
-    try {
-        // Step 4: Extract lt and gt parameters from the URL query
-        const lt = req.query.lt;
-        const gt = req.query.gt;
-    
-        // Step 5: Use Mongoose queries with $lt and $gt operators
-        let query = {};
-        if (lt) {
-          query.enrolled = { $lt: lt };
-        }
-        if (gt) {
-          query.enrolled = { ...query.enrolled, $gt: gt };
-        }
-    
-        const apiData = await product.find(query);
-    
-        // Step 6: Return the results to the client
-        res.json(apiData);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-}
-const findPrice=async(req,res)=>{
-    try {
-        // Step 4: Extract lt and gt parameters from the URL query
-        const lt = req.query.lt;
-        const gt = req.query.gt;
-    
-        // Step 5: Use Mongoose queries with $lt and $gt operators
-        let query = {};
-        if (lt) {
-          query.price = { $lt: lt };
-        }
-        if (gt) {
-          query.price = { ...query.price, $gt: gt };
-        }
-    
-        const apiData = await product.find(query);
-    
-        // Step 6: Return the results to the client
-        res.json(apiData);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-}
-const findLevels=async(req,res)=>{
-    try {
-        // Step 4: Extract lt and gt parameters from the URL query
-        const lt = req.query.lt;
-        const gt = req.query.gt;
-    
-        // Step 5: Use Mongoose queries with $lt and $gt operators
-        let query = {};
-        if (lt) {
-          query.levels = { $lt: lt };
-        }
-        if (gt) {
-          query.levels = { ...query.levels, $gt: gt };
-        }
-    
-        const apiData = await product.find(query);
-    
-        // Step 6: Return the results to the client
-        res.json(apiData);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-}
-const findLessons=async(req,res)=>{
-    try {
-        // Step 4: Extract lt and gt parameters from the URL query
-        const lt = req.query.lt;
-        const gt = req.query.gt;
-    
-        // Step 5: Use Mongoose queries with $lt and $gt operators
-        let query = {};
-        if (lt) {
-          query.lessons = { $lt: lt };
-        }
-        if (gt) {
-          query.lessons = { ...query.lessons, $gt: gt };
-        }
-    
-        const apiData = await product.find(query);
-    
-        // Step 6: Return the results to the client
-        res.json(apiData);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-}
-module.exports={getAllProducts,getAllProductsTesting,findDuration,findEnrolled,findLessons,findLevels,findPrice};
+
+
+
+
+module.exports = { compileCpp, displayQues }
+
+
+
+
+
+

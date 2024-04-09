@@ -1,58 +1,40 @@
 const mongoose=require('mongoose')
 
 const productSchema= new mongoose.Schema({
-    name:{
+    Name:{
         type:String,
         required:true
     },
-    duration:{
+    Id:{
         type:Number,
-        default:4.9
+        required:true
     },
-    enrolled:{
-        type:Number,
-        default:4.9
+    Ques:{
+        type:String,
+        required:true
     },
-    price:{
-        type:Number,
-        required:[true,'type must be provided']
+    Inputs:{
+        type:Array
+        
+    },
+    Output:{
+        type:Array
+        
+    },
+    Solution:{
+        type:String
+        
     },
 
     levels:{
         type:String,
         required:true
         
-    },
-    lessons:{
-        type:Number,
-        required:true
-        
-    },
-    category:{
-        type:String,
-        required:true
-        
-    },
-    instructor:{
-        type:String,
-        required:true
-        
-    },
+    }
    
     
-    review:{
-        type:Number,
-        default:4.9
-    },
    
 
-    // company:{
-    //     type:String,
-    //     enum:{
-    //         values:['apple','samsung','dell','mi'],
-    //         message:`{VALUE} is not supported`
-    //     }
-    // }
 
 })
 
