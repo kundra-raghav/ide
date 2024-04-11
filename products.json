@@ -12,7 +12,7 @@
     "Name": "Calculate Factorial",
     "Id": 4,
     "Ques": "Write a function to calculate the factorial of a given number.",
-    "Inputs": [[5],[ 3],[ 0]],
+    "Inputs": [[8],[ 3],[ 0]],
     "Output": [[120], [6], [1]],
     "Solution": "function factorial(n) {\n  if (n === 0) {\n    return 1;\n  }\n  return n * factorial(n - 1);\n}\n\nconsole.log(factorial(5)); // Output: 120",
     "levels": "Intermediate"

@@ -1,29 +1,20 @@
 #include <iostream>
-#include <cstring>
+#include <cstdlib>
 
-bool isPalindrome(const char* str) {
-    int len = std::strlen(str);
-    for (int i = 0; i < len / 2; i++) {
-        if (str[i] != str[len - i - 1]) {
-            return false;
-        }
-    }
-    return true;
+int add(int a, int b) {
+    return a + b;
 }
 
-int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <string>" << std::endl;
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <num1> <num2>" << std::endl;
         return 1;
     }
 
-    const char* inputStr = argv[1];
+    int num1 = std::atoi(argv[1]);
+    int num2 = std::atoi(argv[2]);
 
-    if (isPalindrome(inputStr)) {
-        std::cout << '"' << inputStr << '"' << " is a palindrome." << std::endl;
-    } else {
-        std::cout << '"' << inputStr << '"' << " is not a palindrome." << std::endl;
-    }
+   
 
-    return 0;
+  
 }

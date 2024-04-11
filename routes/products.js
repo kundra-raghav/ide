@@ -1,13 +1,16 @@
 const express=require('express')
 const router= express.Router();
-const{compileCpp,displayQues,compileAndRunJava}=require('../controllers/products')
+const{compileCpp,displayQues,compileAndRunJava,compileAndRunC,compileAndRunPython, compileAndRunJavascript}=require('../controllers/products')
 
 
 
 
 router.post('/cpp',compileCpp)
-// router.post('/runJs',runJavaScript)
+
 router.post('/runJava',compileAndRunJava)
+router.post('/runC',compileAndRunC)
+router.post('/runPy',compileAndRunPython)
+router.post('/runJS',compileAndRunJavascript)
 router.get('/allQues',displayQues)
 
 

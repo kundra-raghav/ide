@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web IDE</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .language-select {
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    #output-box {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: vertical;
+      border: 1px solid #ccc;
+      background-color: #f0f0f0;
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Web IDE</h1>
+    <div class="language-select">
+      <label for="language">Language:</label>
+      <select id="language">
+        <option value="cpp">C++</option>
+        <option value="java">Java</option>
+        <option value="c">C</option>
+        <option value="python">Python</option>
+        <option value="js">JavaScript</output>
+      </select>
+    </div>
+    <textarea id="code" placeholder="Enter your code here"></textarea>
+    <button id="run-btn">Run</button>
+    <div id="output-box"></div>
+  </div>
+
+  <script>
+    const languageSelect = document.getElementById('language');
+    const codeInput = document.getElementById('code');
+    const runButton = document.getElementById('run-btn');
+    const outputBox = document.getElementById('output-box');
+
+    const apiRoutes = {
+      cpp: 'http://localhost:5000/api/products/cpp',
+      java: 'http://localhost:5000/api/products/runJava',
+      c: 'http://localhost:5000/api/products/runC',
+      python: 'http://localhost:5000/api/products/runPy',
+      js: 'http://localhost:5000/api/products/runJS',
+    };
+
+    runButton.addEventListener('click', async () => {
+      const language = languageSelect.value;
+      const code = codeInput.value;
+      const apiRoute = apiRoutes[language];
+
+      try {
+        const response = await fetch(apiRoute, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Id: 1,
+            [language === 'cpp' ? 'cppCode' : `${language}Code`]: code,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          outputBox.textContent = data.output || data.message;
+        } else {
+          outputBox.textContent = data.error || 'An error occurred';
+        }
+      } catch (error) {
+        outputBox.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>
