@@ -1,20 +1,20 @@
 #include <iostream>
-#include <cstdlib>
 
-int add(int a, int b) {
-    return a + b;
+int factorial(int n) {
+    if (n <= 1)
+        return 1;
+    return n * factorial(n - 1);
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        std::cerr << "Usage: " << argv[0] << " <num1> <num2>" << std::endl;
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <number>" << std::endl;
         return 1;
     }
 
-    int num1 = std::atoi(argv[1]);
-    int num2 = std::atoi(argv[2]);
+    int num = std::atoi(argv[1]);
 
-   
+    std::cout << "Factorial of " << num << " is: " << factorial(num) << std::endl;
 
-  
+    return 0;
 }
